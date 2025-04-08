@@ -15,6 +15,10 @@ import {
 } from '@nestjs/common';
 import { AppService, HelloObject } from './app.service';
 import { Request } from 'express';
+import {
+  CustomForbiddenException,
+  CustomForbiddenExceptionFunction,
+} from './Exception/forbidden.exception';
 
 @Controller()
 export class AppController {
@@ -43,22 +47,24 @@ export class AppController {
     //   },
     //   HttpStatus.FORBIDDEN,
     // );
-    try {
-      throw new Error('Something went wrong!');
-    } catch (error) {
-      Logger.error(`🔥🔥🔥 Something went wrong: ${error}`);
+    // try {
+    //   throw new Error('Something went wrong!');
+    // } catch (error) {
+    //   Logger.error(`🔥🔥🔥 Something went wrong: ${error}`);
 
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          error: 'This is a custom message',
-        },
-        HttpStatus.FORBIDDEN,
-        {
-          cause: error,
-        },
-      );
-    }
+    //   throw new HttpException(
+    //     {
+    //       status: HttpStatus.FORBIDDEN,
+    //       error: 'This is a custom message',
+    //     },
+    //     HttpStatus.FORBIDDEN,
+    //     {
+    //       cause: error,
+    //     },
+    //   );
+    // }
+    // return CustomForbiddenExceptionFunction();
+    throw new CustomForbiddenException();
   }
 
   @Post()
