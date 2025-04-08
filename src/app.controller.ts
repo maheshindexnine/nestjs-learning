@@ -12,6 +12,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { AppService, HelloObject } from './app.service';
+import { Request } from 'express';
 
 @Controller()
 export class AppController {
@@ -25,7 +26,8 @@ export class AppController {
 
   @Post()
   @HttpCode(200)
-  postHello(@Body() body: Body, @Query() qur: any): any {
+  postHello(@Body() body: Body, @Query() qur: any, @Req() req: Request): any {
+    console.log(body, ' -*-*-*-', req.user);
     return this.appService.postHello();
   }
 
