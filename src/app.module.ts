@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LoggerMiddleware } from './logger.middleware';
+import { logger, LoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [],
@@ -10,6 +10,7 @@ import { LoggerMiddleware } from './logger.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*'); // Apply to all routes
+    consumer.apply(logger, LoggerMiddleware).forRoutes('*'); // Apply to all routes
+    // consumer.apply(logger).forRoutes('*'); // Apply to all routes
   }
 }

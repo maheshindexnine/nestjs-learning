@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
+  Logger,
   Param,
   Post,
   Query,
@@ -19,9 +21,44 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  // @Redirect('https://google.com')
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  @Get('redirect')
+  @Redirect('https://google.com')
+  getRouteDirect(): string {
+    return this.appService.getHello();
+  }
+
+  @Get('/error')
+  getExpectionError(): string {
+    // throw new HttpException(
+    //   "Forbidden, you don't have access for this feature route",
+    //   HttpStatus.FORBIDDEN,
+    // );
+    // throw new HttpException(
+    //   {
+    //     customMessage: 'This is custom message object',
+    //   },
+    //   HttpStatus.FORBIDDEN,
+    // );
+    try {
+      throw new Error('Something went wrong!');
+    } catch (error) {
+      Logger.error(`🔥🔥🔥 Something went wrong: ${error}`);
+
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          error: 'This is a custom message',
+        },
+        HttpStatus.FORBIDDEN,
+        {
+          cause: error,
+        },
+      );
+    }
   }
 
   @Post()
