@@ -14,6 +14,7 @@ import {
   Redirect,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { AppService, HelloObject } from './app.service';
 import { Request } from 'express';
@@ -22,8 +23,10 @@ import {
   CustomForbiddenExceptionFunction,
 } from './Exception/forbidden.exception';
 import { CustomValidationPipe } from './Pipe/validation.pipe';
+import { AuthGuard } from './Guard/auth.guard';
 
 @Controller()
+@UseGuards(AuthGuard)
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
@@ -126,5 +129,10 @@ export class AppController {
   ): string {
     console.log(id, typeof id);
     return `This action returns a ${id}`;
+  }
+
+  @Get('/guard')
+  GuardHandler(): string {
+    return `This action returns a`;
   }
 }
