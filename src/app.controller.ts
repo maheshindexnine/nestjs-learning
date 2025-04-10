@@ -7,6 +7,8 @@ import {
   HttpStatus,
   Logger,
   Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
   Post,
   Query,
   Redirect,
@@ -19,6 +21,7 @@ import {
   CustomForbiddenException,
   CustomForbiddenExceptionFunction,
 } from './Exception/forbidden.exception';
+import { CustomValidationPipe } from './Pipe/validation.pipe';
 
 @Controller()
 export class AppController {
@@ -91,5 +94,37 @@ export class AppController {
   findOne(@Param() params: any): string {
     console.log(params.id);
     return `This action returns a #${params.id} cat`;
+  }
+
+  @Get('/pipes/:id')
+  pipeHandler(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+      }),
+    )
+    id: number,
+  ): string {
+    console.log(id, typeof id);
+    return `This action returns a ${id}`;
+  }
+
+  @Get('/pipes/uuid/:uuid')
+  pipeUUIDHandler(
+    @Param('uuid', new ParseUUIDPipe())
+    uuid: string,
+  ): string {
+    console.log(uuid, typeof uuid);
+    return `This action returns a ${uuid}`;
+  }
+
+  @Get('/pipes/custom/:id')
+  pipeCustomHandler(
+    @Param('id', CustomValidationPipe)
+    id: string,
+  ): string {
+    console.log(id, typeof id);
+    return `This action returns a ${id}`;
   }
 }
