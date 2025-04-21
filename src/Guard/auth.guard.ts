@@ -4,7 +4,6 @@ import {
   ExecutionContext,
   UnauthorizedException,
 } from '@nestjs/common';
-import { log } from 'console';
 import { Request } from 'express';
 
 @Injectable()
@@ -28,9 +27,13 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const { name = 'Dummy Name' } = request.query;
+      // TODO: Implement proper token validation logic here
+      // For now, we'll just check if the token exists
+      if (!token) {
+        throw new UnauthorizedException('Invalid token');
+      }
       return true;
-    } catch (error) {
+    } catch {
       throw new UnauthorizedException('Token is invalid or expired');
     }
   }
